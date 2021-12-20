@@ -135,6 +135,5 @@ exports.delete = async (req, res) => {
             msg: "Hubo un error borando este producto",
             error: error
         })
-
     }
 }
