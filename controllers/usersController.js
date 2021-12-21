@@ -15,7 +15,8 @@ exports.create = async (req, res) => {
 		email,
 		userImage,
 		bio,
-		password
+		password,
+		purchasedProducts
 	 } = req.body
 
 	//PROCESO ASÍNCRONO
@@ -34,7 +35,8 @@ exports.create = async (req, res) => {
 			email,
 			userImage,
 			bio,
-			password: hashedPassword
+			password: hashedPassword,
+			purchasedProducts
 		})
 
 		// 5. AUTENTICACIÓN CON TOKENS

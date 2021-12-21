@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const Schema = require ("mongoose")
 
 const merchSchema = mongoose.Schema(
     {
@@ -23,6 +24,7 @@ const merchSchema = mongoose.Schema(
         color: {
             type: String
         },
+        owner: { type: Schema.Types.ObjectId, ref: "User" },
     }
 )
 

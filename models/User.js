@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const Schema = require ("mongoose")
 
 const userSchema = mongoose.Schema(
     {
@@ -36,7 +37,8 @@ const userSchema = mongoose.Schema(
         password: {
             type: String,
             required: [true, "La contraseña es necesaria Ingresa la tuya."]
-        }
+        },
+        purchasedProducts: [{ type: Schema.Types.ObjectId, ref: "Merch" }]
     }
 )
 

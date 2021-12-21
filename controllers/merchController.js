@@ -11,6 +11,7 @@ exports.create = async (req, res) => {
         details,
         size,
         color,
+        owner
     } = req.body
        
     try {
@@ -21,7 +22,8 @@ exports.create = async (req, res) => {
             description,
             details,
             size,
-            color  
+            color,
+            owner  
         })
        
         res.json ({
