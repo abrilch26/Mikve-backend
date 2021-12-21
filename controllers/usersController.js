@@ -15,10 +15,16 @@ exports.create = async (req, res) => {
 		email,
 		userImage,
 		bio,
-		password,
-		purchasedProducts
+		password	
 	 } = req.body
 
+	 if ((!nombre, !email, !password)) {
+		return res.status(500).json({
+		  msg: "Todos los campos son obligatorios",
+		  error: error,
+		});
+	  }
+	
 	//PROCESO ASÍNCRONO
 	try {
 		
@@ -36,7 +42,6 @@ exports.create = async (req, res) => {
 			userImage,
 			bio,
 			password: hashedPassword,
-			purchasedProducts
 		})
 
 		// 5. AUTENTICACIÓN CON TOKENS
@@ -126,7 +131,6 @@ exports.login = async (req, res) => {
 		return
 
 	} catch (error) {
-		console.log(error)
 		res.status(500).json({
 			msg: "Hubo un problema con la autenticación.",
 			data: error
@@ -147,10 +151,48 @@ exports.verifyToken = async (req, res) => {
 		})
 
 	} catch (error) {
-			console.log(error)
-
 			res.status(500).json({
 				msg: "Hubo un error con el usuario"
 			})
 	}
 }
+
+//EDITAR DATOS DE USUARIO
+exports.editUser = async (req, res) => {
+
+	const { id } = req.params;
+	const {
+		nombre,
+		apellido,
+		telefono,
+		pais,
+		email,
+		userImage,
+		bio,
+	} = req.body;
+
+	try {
+	  const updateUser = await User.findByIdAndUpdate(
+		id,
+		{
+		nombre,
+		apellido,
+		telefono,
+		pais,
+		email,
+		userImage,
+		bio
+		},
+		{ new: true }
+	  );
+	  res.json({
+		msg: "Datos actualizados con éxito",
+		data: updateUser,
+	  });
+	} catch (error) {
+	  res.status(500).json({
+		msg: "Hubo un error actualizando los datos.",
+		error: error,
+	  });
+	}
+  };

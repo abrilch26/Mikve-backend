@@ -14,5 +14,9 @@ router.post("/login", userController.login)
 //verificar usuario
 router.get("/verifytoken", authorization, userController.verifyToken)
 
+//Editar datos de usuario
+router.put("/editprofile/:id", userController.editUser);
+
+
 
 module.exports = router
