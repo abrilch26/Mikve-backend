@@ -10,19 +10,17 @@ exports.create = async (req, res) => {
 	const { 
 		nombre,
 		apellido,
-		telefono,
-		pais,
 		email,
-		userImage,
-		bio,
 		password	
 	 } = req.body
 
-	 if ((!nombre, !email, !password)) {
+	 console.log(req.body)
+	 
+	 if ((!nombre, !apellido, !email, !password)) {
 		return res.status(500).json({
 		  msg: "Todos los campos son obligatorios",
-		  error: error,
-		});
+		  error: error
+		})
 	  }
 	
 	//PROCESO ASÍNCRONO
@@ -36,11 +34,7 @@ exports.create = async (req, res) => {
 		const newUser = await User.create({
 			nombre,
 			apellido,
-			telefono,
-			pais,
 			email,
-			userImage,
-			bio,
 			password: hashedPassword,
 		})
 
@@ -63,18 +57,23 @@ exports.create = async (req, res) => {
 				if(error) throw error
 
 				res.json({
-					msg: "¡Token correctamente generado!",
 					data: token
 				})
 			}
 		)
 
 	} catch (error) {
-	// si existe error con nuestro await:
-		res.status(500).json({
-			msg: "Hubo un error con la creación de usuario :(",
-			error: error
-		})
+		if (error.code === 11000) {
+			res.json({
+				msg: "Este correo ya ha sido registrado, intenta con otro",
+				error: error
+			})
+		} else { //si hubo otro error con await:
+			res.json({
+				msg: "Hubo un error con la creación de usuario :(",
+				error: error
+			})	
+		}
 	}
 }
 
@@ -90,8 +89,8 @@ exports.login = async (req, res) => {
 
 		// 3.validamos, en caso de que el usuario no exista:
 		if(!foundUser) {
-			return res.status(400).json({
-				msg: "El usuario o la contraseña son incorrectos."
+			return res.json({
+				msg: "El correo o la contraseña son incorrectos."
 			})
 		}
 
@@ -100,8 +99,8 @@ exports.login = async (req, res) => {
 
 		// 5. validamos si el password coincide
 		if(!verifiedPass) {
-			return await res.status(400).json({
-				msg: "El usuario o la contraseña no coinciden."
+			return await res.json({
+				msg: "El correo y la contraseña no coinciden."
 			})
 		}
 
@@ -122,7 +121,6 @@ exports.login = async (req, res) => {
 				if(error) throw error
 
 				res.json({
-					msg: "Inicio de sesión exitoso.",
 					data: token
 				})
 			}
@@ -131,7 +129,7 @@ exports.login = async (req, res) => {
 		return
 
 	} catch (error) {
-		res.status(500).json({
+		res.json({
 			msg: "Hubo un problema con la autenticación.",
 			data: error
 		})
@@ -156,6 +154,23 @@ exports.verifyToken = async (req, res) => {
 			})
 	}
 }
+
+//VER PERFIL
+exports.getProfile = async (req, res) => {
+	const { id } = req.params
+	try {
+		const user = await User.findById(id).populate("purchasedProducts")
+		res.json({
+			data: user
+		})
+	} catch (eror) {
+		res.status(500).json({
+			msg: "Error obteniendo los datos",
+			error: error
+		})
+	}
+}
+
 
 //EDITAR DATOS DE USUARIO
 exports.editUser = async (req, res) => {

@@ -19,7 +19,7 @@ const userSchema = mongoose.Schema(
         },
         pais: {
             type: String,
-            required: [true, "El país dónde juegas es requerido"],
+            default: ""
         },
         email: {
             type: String,
@@ -30,9 +30,11 @@ const userSchema = mongoose.Schema(
         },
         userImage: {
             type: String,
+            default: ""
         },
         bio: {
-            type: String
+            type: String,
+            default: "",
         },
         password: {
             type: String,

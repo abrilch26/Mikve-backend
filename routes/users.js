@@ -6,7 +6,7 @@ const authorization = require ("../middleware/authorization")
 
 
 //crear usuario
-router.post("/create", userController.create)
+router.post("/signup", userController.create)
 
 //iniciar sesión 
 router.post("/login", userController.login)
