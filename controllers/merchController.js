@@ -27,17 +27,6 @@ exports.create = async (req, res) => {
             owner  
         })
 
-        const newProduct = await Merch.create({
-            productName,
-            price,
-            image,
-            description,
-            details,
-            size,
-            color,
-            owner
-        })
-
         const updatedUser = await User.findOneAndUpdate(
             { id: owner },
             { $push: {purchasedProducts: newProduct} },
