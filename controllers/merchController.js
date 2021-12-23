@@ -1,4 +1,5 @@
 const Merch = require ("../models/Merch")
+const User = require ("../models/User")
 
 
 //CRUD
@@ -25,10 +26,28 @@ exports.create = async (req, res) => {
             color,
             owner  
         })
+
+        const newProduct = await Merch.create({
+            productName,
+            price,
+            image,
+            description,
+            details,
+            size,
+            color,
+            owner
+        })
+
+        const updatedUser = await User.findOneAndUpdate(
+            { id: owner },
+            { $push: {purchasedProducts: newProduct} },
+            { new: true} 
+        )
        
         res.json ({
             msg: "Producto creado con éxito",
-            data: newMerch
+            data: newMerch,
+            user: updatedUser
         })
 
     } catch(error) {
@@ -133,7 +152,7 @@ exports.delete = async (req, res) => {
         })
 
     } catch (error) {
-        res.status(500).json({
+        res.json({
             msg: "Hubo un error borando este producto",
             error: error
         })
